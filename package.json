@@ -4,9 +4,10 @@
   "description": "Backend for Carbono14",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll --silent --verbose --colors ",
-    "test:staged": "jest --passWithNoTests --silent --noStackTrace",
-    "test:ci": "jest --coverage --noStackTrace --silent",
+    "test": "jest --silent --verbose --colors --passWithNoTests",
+    "test:unit": "npm test -- --watch",
+    "test:staged": "npm test -- --noStackTrace",
+    "test:ci": "npm test -- --coverage --noStackTrace",
     "prepare": "husky install"
   },
   "standard": {
