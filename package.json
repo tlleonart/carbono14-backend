@@ -4,11 +4,12 @@
   "description": "Backend for Carbono14",
   "main": "index.js",
   "scripts": {
-    "test": "jest --silent --verbose --colors --passWithNoTests",
+    "test": "jest --colors --noStackTrace --passWithNoTests --runInBand",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:integration": "npm test -- --watch -c jest-integration-config.js",
-    "test:staged": "npm test -- --noStackTrace",
-    "test:ci": "npm test -- --coverage --noStackTrace",
+    "test:staged": "npm test -- -findRelatedTests --silent",
+    "test:ci": "npm test -- --coverage --silent",
+    "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
     "prepare": "husky install"
   },
   "standard": {
