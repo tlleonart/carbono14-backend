@@ -28,6 +28,7 @@
   "dependencies": {
     "bcrypt": "^5.1.0",
     "husky": "^8.0.3",
+    "jsonwebtoken": "^9.0.1",
     "validator": "^13.9.0"
   }
 }
