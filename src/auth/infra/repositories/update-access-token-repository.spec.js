@@ -1,4 +1,4 @@
-const { MissingParamError } = require('../../utils/errors')
+const { MissingParamError } = require('../../../utils/errors')
 const MongoHelper = require('../helpers/mongo-helper')
 const UpdateAccessTokenRepository = require('./update-access-token-repository')
 
