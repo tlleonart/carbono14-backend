@@ -1,7 +1,11 @@
-const { MissingParamError } = require('../../../utils/errors')
+const { MissingParamError, InvalidParamError } = require('../../../utils/errors')
 const HttpResponse = require('../../../utils/helpers/http-response')
 
 module.exports = class RegisterEcommerceRouter {
+  constructor ({ emailValidator } = {}) {
+    this.emailValidator = emailValidator
+  }
+
   async route (httpRequest) {
     try {
       const { accessToken } = httpRequest.headers
@@ -24,6 +28,10 @@ module.exports = class RegisterEcommerceRouter {
         return HttpResponse.badRequest(new MissingParamError('contactEmail'))
       }
 
+      if (!this.emailValidator.isValid(contactEmail)) {
+        return HttpResponse.badRequest(new InvalidParamError('contactEmail'))
+      }
+
       if (!description) {
         return HttpResponse.badRequest(new MissingParamError('description'))
       }
@@ -32,7 +40,7 @@ module.exports = class RegisterEcommerceRouter {
         return HttpResponse.badRequest(new MissingParamError('country'))
       }
     } catch (error) {
-      // console.error(error)
+      console.error(error)
       return HttpResponse.serverError()
     }
   }

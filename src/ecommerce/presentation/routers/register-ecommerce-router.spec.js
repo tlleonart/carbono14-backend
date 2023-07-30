@@ -1,13 +1,31 @@
 const { UnauthorizedError, ServerError } = require('../../../auth/presentation/errors')
-const { MissingParamError } = require('../../../utils/errors')
+const { MissingParamError, InvalidParamError } = require('../../../utils/errors')
 const RegisterEcommerceRouter = require('./register-ecommerce-router')
 
 const makeSut = () => {
-  const sut = new RegisterEcommerceRouter()
+  const emailValidatorSpy = makeEmailValidator()
+  const sut = new RegisterEcommerceRouter({
+    emailValidator: emailValidatorSpy
+  })
 
   return {
-    sut
+    sut,
+    emailValidatorSpy
   }
+}
+
+const makeEmailValidator = () => {
+  class EmailValidatorSpy {
+    isValid (email) {
+      this.email = email
+      return this.isEmailValid
+    }
+  }
+
+  const emailValidatorSpy = new EmailValidatorSpy()
+  emailValidatorSpy.isEmailValid = true
+
+  return emailValidatorSpy
 }
 
 describe('Register Ecommerce Route', () => {
@@ -106,5 +124,24 @@ describe('Register Ecommerce Route', () => {
     })
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body.error).toBe(new ServerError().message)
+  })
+
+  test('Should return 400 if an invalid email is provided', async () => {
+    const { sut, emailValidatorSpy } = makeSut()
+    emailValidatorSpy.isEmailValid = false
+    const httpRequest = {
+      headers: {
+        accessToken: 'valid_token'
+      },
+      body: {
+        name: 'valid_name',
+        contactEmail: 'invalid_email',
+        description: 'valid_description',
+        country: 'valid_country'
+      }
+    }
+    const httpResponse = await sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body.error).toBe(new InvalidParamError('contactEmail').message)
   })
 })
