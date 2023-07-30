@@ -28,6 +28,16 @@ const makeEmailValidator = () => {
   return emailValidatorSpy
 }
 
+const makeEmailValidatorWithError = () => {
+  class EmailValidatorSpy {
+    isValid () {
+      throw new Error()
+    }
+  }
+
+  return new EmailValidatorSpy()
+}
+
 describe('Register Ecommerce Route', () => {
   test('Should return 401 if no accessToken is provided', async () => {
     const { sut } = makeSut()
@@ -143,5 +153,28 @@ describe('Register Ecommerce Route', () => {
     const httpResponse = await sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body.error).toBe(new InvalidParamError('contactEmail').message)
+  })
+
+  test('Should return 500 if EmailValidator throws', async () => {
+    const emailValidatorSpy = makeEmailValidatorWithError()
+    const sut = new RegisterEcommerceRouter({
+      emailValidator: emailValidatorSpy
+    })
+
+    const httpRequest = {
+      headers: {
+        accessToken: 'valid_token'
+      },
+      body: {
+        name: 'valid_name',
+        contactEmail: 'valid_email',
+        description: 'valid_description',
+        country: 'valid_country'
+      }
+    }
+
+    const httpResponse = await sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body.error).toBe(new ServerError().message)
   })
 })
