@@ -194,4 +194,26 @@ describe('Register Ecommerce Route', () => {
     await sut.route(httpRequest)
     expect(emailValidatorSpy.email).toBe(httpRequest.body.contactEmail)
   })
+
+  test('Should throw if invalid dependencies are provided', async () => {
+    const sut = new RegisterEcommerceRouter({
+      emailValidator: {}
+    })
+
+    const httpRequest = {
+      headers: {
+        accessToken: 'valid_token'
+      },
+      body: {
+        name: 'valid_name',
+        contactEmail: 'valid_email',
+        description: 'valid_description',
+        country: 'valid_country'
+      }
+    }
+
+    const httpResponse = await sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body.error).toBe(new ServerError().message)
+  })
 })
