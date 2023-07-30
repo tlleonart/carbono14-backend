@@ -50,10 +50,10 @@ describe('LoadUserByEmail Repository', () => {
 
   test('Should return an user if user is found', async () => {
     const { sut, userModel } = makeSut()
-    await userModel.insertOne({
-      email: 'valid_email@mail.com'
-    })
-    const user = await sut.load('valid_email@mail.com')
-    expect(user.email).toBe('valid_email@mail.com')
+    const mockUser = { email: 'valid_email@mail.com', password: 'hashed_password' }
+    await userModel.insertOne(mockUser)
+
+    const insertedUser = await sut.load('valid_email@mail.com')
+    expect(insertedUser).toEqual(mockUser)
   })
 })
