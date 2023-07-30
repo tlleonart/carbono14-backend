@@ -89,4 +89,22 @@ describe('Register Ecommerce Route', () => {
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body.error).toBe(new ServerError().message)
   })
+
+  test('Should return 500 if no httpRequest has no body', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.route({
+      headers: {}
+    })
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body.error).toBe(new ServerError().message)
+  })
+
+  test('Should return 500 if no httpRequest has no headers', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.route({
+      body: {}
+    })
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body.error).toBe(new ServerError().message)
+  })
 })
