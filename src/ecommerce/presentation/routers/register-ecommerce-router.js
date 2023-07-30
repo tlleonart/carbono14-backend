@@ -3,32 +3,37 @@ const HttpResponse = require('../../../utils/helpers/http-response')
 
 module.exports = class RegisterEcommerceRouter {
   async route (httpRequest) {
-    const { accessToken } = httpRequest.headers
-    const {
-      name,
-      contactEmail,
-      description,
-      country
-    } = httpRequest.body
+    try {
+      const { accessToken } = httpRequest.headers
+      const {
+        name,
+        contactEmail,
+        description,
+        country
+      } = httpRequest.body
 
-    if (!accessToken) {
-      return HttpResponse.unauthorizedError()
-    }
+      if (!accessToken) {
+        return HttpResponse.unauthorizedError()
+      }
 
-    if (!name) {
-      return HttpResponse.badRequest(new MissingParamError('name'))
-    }
+      if (!name) {
+        return HttpResponse.badRequest(new MissingParamError('name'))
+      }
 
-    if (!contactEmail) {
-      return HttpResponse.badRequest(new MissingParamError('contactEmail'))
-    }
+      if (!contactEmail) {
+        return HttpResponse.badRequest(new MissingParamError('contactEmail'))
+      }
 
-    if (!description) {
-      return HttpResponse.badRequest(new MissingParamError('description'))
-    }
+      if (!description) {
+        return HttpResponse.badRequest(new MissingParamError('description'))
+      }
 
-    if (!country) {
-      return HttpResponse.badRequest(new MissingParamError('country'))
+      if (!country) {
+        return HttpResponse.badRequest(new MissingParamError('country'))
+      }
+    } catch (error) {
+      // console.error(error)
+      return HttpResponse.serverError()
     }
   }
 }

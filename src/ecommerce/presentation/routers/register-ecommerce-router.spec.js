@@ -1,4 +1,4 @@
-const { UnauthorizedError } = require('../../../auth/presentation/errors')
+const { UnauthorizedError, ServerError } = require('../../../auth/presentation/errors')
 const { MissingParamError } = require('../../../utils/errors')
 const RegisterEcommerceRouter = require('./register-ecommerce-router')
 
@@ -81,5 +81,12 @@ describe('Register Ecommerce Route', () => {
     const httpReponse = await sut.route(httpRequest)
     expect(httpReponse.statusCode).toBe(400)
     expect(httpReponse.body.error).toBe(new MissingParamError('country').message)
+  })
+
+  test('Should return 500 if no httpRequest is provided', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.route()
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body.error).toBe(new ServerError().message)
   })
 })
