@@ -50,4 +50,10 @@ describe('LoadUserByEmail Repository', () => {
     const promise = sut.load('any_email@mail.com')
     expect(promise).rejects.toThrow()
   })
+
+  test('Should throw if no email is provided', async () => {
+    const { sut } = makeSut()
+    const promise = sut.load()
+    expect(promise).rejects.toThrow()
+  })
 })
