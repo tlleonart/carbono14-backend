@@ -39,8 +39,10 @@ module.exports = class RegisterEcommerceRouter {
       if (!country) {
         return HttpResponse.badRequest(new MissingParamError('country'))
       }
+
+      return HttpResponse.created({ ...httpRequest.body, isActive: true })
     } catch (error) {
-      console.error(error)
+      // console.error(error)
       return HttpResponse.serverError()
     }
   }

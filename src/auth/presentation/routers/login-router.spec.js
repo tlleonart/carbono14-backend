@@ -234,7 +234,7 @@ describe('Login Router', () => {
     }
   })
 
-  test('Should throw dependency throws', async () => {
+  test('Should throw if dependency throws', async () => {
     const suts = [].concat(
       new LoginRouter({
         authUseCase: makeAuthUseCaseWithError()
