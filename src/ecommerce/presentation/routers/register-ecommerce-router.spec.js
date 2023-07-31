@@ -259,7 +259,7 @@ describe('Register Ecommerce Route', () => {
     expect(httpResponse.body.error).toBe(new ServerError().message)
   })
 
-  /* test('Should return 201 with isActive true if valid properties are provided and no isActive is specify', async () => {
+  test('Should return 201 with isActive true if valid properties are provided and no isActive is specify', async () => {
     const { sut } = makeSut()
     const httpRequest = {
       headers: {
@@ -275,5 +275,5 @@ describe('Register Ecommerce Route', () => {
     const httpResponse = await sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(201)
     expect(httpResponse.body.isActive).toBe(true)
-  }) */
+  })
 })

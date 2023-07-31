@@ -14,7 +14,8 @@ module.exports = class RegisterEcommerceRouter {
         name,
         contactEmail,
         description,
-        country
+        country,
+        isActive
       } = httpRequest.body
 
       if (!accessToken) {
@@ -41,9 +42,13 @@ module.exports = class RegisterEcommerceRouter {
         return HttpResponse.badRequest(new MissingParamError('country'))
       }
 
-      const response = await this.registerEcommerceUseCase.register({ name, description, contactEmail, country })
+      const finalIsActive = isActive !== undefined ? isActive : true
 
-      return HttpResponse.created(response)
+      const ecommerceData = { name, description, contactEmail, country }
+
+      const registeredEcommerce = await this.registerEcommerceUseCase.register(ecommerceData)
+
+      return HttpResponse.created({ isActive: finalIsActive, ...registeredEcommerce })
     } catch (error) {
       console.error(error)
       return HttpResponse.serverError()
