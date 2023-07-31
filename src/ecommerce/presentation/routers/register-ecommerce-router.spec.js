@@ -63,6 +63,16 @@ const makeRegisterEcommerceUseCase = () => {
   return registerEcommerceUseCaseSpy
 }
 
+const makeRegisterEcommerceUseCaseWithError = () => {
+  class RegisterEcommerceUseCaseSpy {
+    async register (ecommerceData) {
+      throw new Error()
+    }
+  }
+
+  return new RegisterEcommerceUseCaseSpy()
+}
+
 describe('Register Ecommerce Route', () => {
   test('Should return 401 if no accessToken is provided', async () => {
     const { sut } = makeSut()
@@ -176,6 +186,25 @@ describe('Register Ecommerce Route', () => {
     }
     await sut.route(httpRequest)
     expect(registerEcommerceUseCaseSpy.ecommerceData).toEqual(httpRequest.body)
+  })
+
+  test('Should return 500 if RegisterEcommerceUseCase throws', async () => {
+    const authUseCaseSpy = makeRegisterEcommerceUseCaseWithError()
+    const sut = new RegisterEcommerceRouter(authUseCaseSpy)
+    const httpRequest = {
+      headers: {
+        accessToken: 'valid_token'
+      },
+      body: {
+        name: 'valid_name',
+        contactEmail: 'valid_email',
+        description: 'valid_description',
+        country: 'valid_country'
+      }
+    }
+    const httpResponse = await sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body.error).toBe(new ServerError().message)
   })
 
   test('Should return 400 if an invalid email is provided', async () => {
