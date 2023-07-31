@@ -2,11 +2,36 @@ const { MissingParamError } = require('../../../utils/errors')
 const RegisterEcommerceUseCase = require('./register-ecommerce-usecase')
 
 const makeSut = () => {
-  const sut = new RegisterEcommerceUseCase()
+  const registerEcommerceRepositorySpy = makeRegisterEcommerceRepository()
+  const sut = new RegisterEcommerceUseCase({
+    registerEcommerceRepository: registerEcommerceRepositorySpy
+  })
 
   return {
-    sut
+    sut,
+    registerEcommerceRepositorySpy
   }
+}
+
+const makeRegisterEcommerceRepository = () => {
+  class RegisterEcommerceRepositorySpy {
+    async register ({
+      name,
+      description,
+      contactEmail,
+      country
+    }) {
+      this.name = name
+      this.description = description
+      this.contactEmail = contactEmail
+      this.country = country
+      this.isActive = true
+    }
+  }
+
+  const registerEcommerceRepositorySpy = new RegisterEcommerceRepositorySpy()
+
+  return registerEcommerceRepositorySpy
 }
 
 describe('Register Ecommerce UseCase', () => {
@@ -32,5 +57,17 @@ describe('Register Ecommerce UseCase', () => {
     const { sut } = makeSut()
     const promise = sut.register('valid_name', 'valid_description', 'valid_contact_email')
     expect(promise).rejects.toThrow(new MissingParamError('country'))
+  })
+
+  test('Should call RegisterEcommerceRepository with correct parameters', async () => {
+    const { sut, registerEcommerceRepositorySpy } = makeSut()
+
+    await sut.register('valid_name', 'valid_description', 'valid_email', 'valid_country')
+
+    expect(registerEcommerceRepositorySpy.name).toBe('valid_name')
+    expect(registerEcommerceRepositorySpy.description).toBe('valid_description')
+    expect(registerEcommerceRepositorySpy.contactEmail).toBe('valid_email')
+    expect(registerEcommerceRepositorySpy.country).toBe('valid_country')
+    expect(registerEcommerceRepositorySpy.isActive).toBe(true)
   })
 })

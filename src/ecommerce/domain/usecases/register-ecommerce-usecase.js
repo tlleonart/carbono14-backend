@@ -1,6 +1,10 @@
 const { MissingParamError } = require('../../../utils/errors')
 
 module.exports = class RegisterEcommerceUseCase {
+  constructor ({ registerEcommerceRepository } = {}) {
+    this.registerEcommerceRepository = registerEcommerceRepository
+  }
+
   async register (name, description, contactEmail, country) {
     if (!name) {
       throw new MissingParamError('name')
@@ -18,6 +22,10 @@ module.exports = class RegisterEcommerceUseCase {
       throw new MissingParamError('country')
     }
 
-    return null
+    const isValid = true
+
+    const response = await this.registerEcommerceRepository.register({ name, description, contactEmail, country, isValid })
+
+    return response
   }
 }
