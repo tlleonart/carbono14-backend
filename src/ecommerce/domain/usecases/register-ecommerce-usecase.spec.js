@@ -31,6 +31,8 @@ const makeRegisterEcommerceRepository = () => {
 
   const registerEcommerceRepositorySpy = new RegisterEcommerceRepositorySpy()
 
+  console.log(registerEcommerceRepositorySpy)
+
   return registerEcommerceRepositorySpy
 }
 
