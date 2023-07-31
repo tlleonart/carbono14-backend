@@ -21,4 +21,10 @@ describe('Register Ecommerce UseCase', () => {
     const promise = sut.register('valid_name')
     expect(promise).rejects.toThrow(new MissingParamError('description'))
   })
+
+  test('Should throw if no contactEmail is provided', async () => {
+    const { sut } = makeSut()
+    const promise = sut.register('valid_name', 'valid_description')
+    expect(promise).rejects.toThrow(new MissingParamError('contactEmail'))
+  })
 })
