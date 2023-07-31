@@ -321,4 +321,23 @@ describe('Register Ecommerce Route', () => {
     expect(httpResponse.statusCode).toBe(201)
     expect(httpResponse.body.isActive).toBe(true)
   })
+
+  test('Should set isActive to true if it is not provided in the request body', async () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      headers: {
+        accessToken: 'valid_token'
+      },
+      body: {
+        name: 'valid_name',
+        contactEmail: 'valid_email',
+        description: 'valid_description',
+        country: 'valid_country'
+      // isActive is not provided in the request body
+      }
+    }
+    const httpResponse = await sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(201)
+    expect(httpResponse.body.isActive).toBe(true) // Should be true as it is not provided in the request body
+  })
 })
