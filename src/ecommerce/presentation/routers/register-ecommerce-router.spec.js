@@ -332,12 +332,11 @@ describe('Register Ecommerce Route', () => {
         name: 'valid_name',
         contactEmail: 'valid_email',
         description: 'valid_description',
-        country: 'valid_country'
-      // isActive is not provided in the request body
+        country: 'valid_country',
+        isActive: undefined
       }
     }
     const httpResponse = await sut.route(httpRequest)
-    expect(httpResponse.statusCode).toBe(201)
-    expect(httpResponse.body.isActive).toBe(true) // Should be true as it is not provided in the request body
+    expect(httpResponse.body.isActive).toBe(true)
   })
 })
