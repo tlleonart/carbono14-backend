@@ -267,25 +267,41 @@ describe('Register Ecommerce Route', () => {
   })
 
   test('Should throw if invalid dependencies are provided', async () => {
-    const sut = new RegisterEcommerceRouter({
-      emailValidator: {}
-    })
+    const invalid = {}
+    const registerEcommerceUseCase = makeRegisterEcommerceUseCase()
 
-    const httpRequest = {
-      headers: {
-        accessToken: 'valid_token'
-      },
-      body: {
-        name: 'valid_name',
-        contactEmail: 'valid_email',
-        description: 'valid_description',
-        country: 'valid_country'
+    const suts = [].concat(
+      new RegisterEcommerceRouter(),
+      new RegisterEcommerceRouter({}),
+      new RegisterEcommerceRouter({
+        registerEcommerceUseCase: invalid
+      }),
+      new RegisterEcommerceRouter({
+        registerEcommerceUseCase
+      }),
+      new RegisterEcommerceRouter({
+        registerEcommerceUseCase,
+        emailValidator: invalid
+      })
+    )
+
+    for (const sut of suts) {
+      const httpRequest = {
+        headers: {
+          accessToken: 'valid_token'
+        },
+        body: {
+          name: 'valid_name',
+          contactEmail: 'valid_email',
+          description: 'valid_description',
+          country: 'valid_country'
+        }
       }
-    }
 
-    const httpResponse = await sut.route(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body.error).toBe(new ServerError().message)
+      const httpResponse = await sut.route(httpRequest)
+      expect(httpResponse.statusCode).toBe(500)
+      expect(httpResponse.body.error).toBe(new ServerError().message)
+    }
   })
 
   test('Should return 201 with isActive true if valid properties are provided and no isActive is specify', async () => {
