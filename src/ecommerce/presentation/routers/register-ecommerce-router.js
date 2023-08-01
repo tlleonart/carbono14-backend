@@ -42,13 +42,13 @@ module.exports = class RegisterEcommerceRouter {
         return HttpResponse.badRequest(new MissingParamError('country'))
       }
 
-      const finalIsActive = isActive !== undefined ? isActive : true
+      this.isActive = isActive !== undefined ? isActive : true
 
       const ecommerceData = { name, description, contactEmail, country }
 
       const registeredEcommerce = await this.registerEcommerceUseCase.register(ecommerceData)
 
-      return HttpResponse.created({ isActive: finalIsActive, ...registeredEcommerce })
+      return HttpResponse.created({ isActive: this.isActive, ...registeredEcommerce })
     } catch (error) {
       console.error(error)
       return HttpResponse.serverError()

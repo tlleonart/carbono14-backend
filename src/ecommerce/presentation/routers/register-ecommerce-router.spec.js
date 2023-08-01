@@ -332,11 +332,28 @@ describe('Register Ecommerce Route', () => {
         name: 'valid_name',
         contactEmail: 'valid_email',
         description: 'valid_description',
-        country: 'valid_country',
-        isActive: undefined
+        country: 'valid_country'
       }
     }
     const httpResponse = await sut.route(httpRequest)
     expect(httpResponse.body.isActive).toBe(true)
+  })
+
+  test('Should set isActive to false if provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      headers: {
+        accessToken: 'valid_token'
+      },
+      body: {
+        name: 'valid_name',
+        contactEmail: 'valid_email',
+        description: 'valid_description',
+        country: 'valid_country',
+        isActive: false
+      }
+    }
+    const httpResponse = await sut.route(httpRequest)
+    expect(httpResponse.body.isActive).toBe(false)
   })
 })
