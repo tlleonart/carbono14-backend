@@ -36,6 +36,16 @@ const makeRegisterEcommerceRepository = () => {
   return registerEcommerceRepositorySpy
 }
 
+const makeRegisterEcommerceRepositoryWithError = () => {
+  class RegisterEcommerceRepositorySpy {
+    async register () {
+      throw new Error()
+    }
+  }
+
+  return new RegisterEcommerceRepositorySpy()
+}
+
 describe('Register Ecommerce UseCase', () => {
   test('Should throw if no name is provided', async () => {
     const { sut } = makeSut()
@@ -75,6 +85,14 @@ describe('Register Ecommerce UseCase', () => {
 
   test('Should throw if no RegisterEcommerceRepository is provided', async () => {
     const sut = new RegisterEcommerceUseCase()
+    const promise = sut.register('valid_name', 'valid_description', 'valid_email', 'valid_country')
+    expect(promise).rejects.toThrow()
+  })
+
+  test('Should throw if RegisterEcommerceRepository throws', async () => {
+    const sut = new RegisterEcommerceUseCase({
+      registerEcommerceRepository: makeRegisterEcommerceRepositoryWithError()
+    })
     const promise = sut.register('valid_name', 'valid_description', 'valid_email', 'valid_country')
     expect(promise).rejects.toThrow()
   })
