@@ -1,5 +1,5 @@
 const MissingParamError = require('../../../utils/errors/missing-param-error')
-const MongoHelper = require('../helpers/mongo-helper')
+const MongoHelper = require('../../../utils/helpers/mongo-helper')
 
 module.exports = class LoadUserByEmailRepository {
   async load (email) {
