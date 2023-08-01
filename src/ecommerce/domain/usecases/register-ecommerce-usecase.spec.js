@@ -72,4 +72,10 @@ describe('Register Ecommerce UseCase', () => {
     expect(registerEcommerceRepositorySpy.country).toBe('valid_country')
     expect(registerEcommerceRepositorySpy.isActive).toBe(true)
   })
+
+  test('Should throw if no RegisterEcommerceRepository is provided', async () => {
+    const sut = new RegisterEcommerceUseCase()
+    const promise = sut.register('valid_name', 'valid_description', 'valid_email', 'valid_country')
+    expect(promise).rejects.toThrow()
+  })
 })
