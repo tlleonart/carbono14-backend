@@ -21,6 +21,12 @@ module.exports = class RegisterEcommerceRepository {
       throw new MissingParamError('contactEmail')
     }
 
+    if (!country) {
+      throw new MissingParamError('country')
+    }
+
+    this.isActive = !isActive ? true : isActive
+
     const ecommerceModel = await MongoHelper.getCollection('ecommerces')
 
     await ecommerceModel.insertOne({
@@ -28,7 +34,7 @@ module.exports = class RegisterEcommerceRepository {
       description,
       contactEmail,
       country,
-      isActive
+      isActive: this.isActive
     })
   }
 }
