@@ -47,4 +47,12 @@ describe('RegisterEcommerce Repository', () => {
     const promise = sut.register({})
     expect(promise).rejects.toThrow(new MissingParamError('name'))
   })
+
+  test('Should throw if no description is provided', () => {
+    const sut = makeSut()
+    const promise = sut.register({
+      name: 'valid_name'
+    })
+    expect(promise).rejects.toThrow(new MissingParamError('description'))
+  })
 })

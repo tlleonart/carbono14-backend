@@ -1,7 +1,7 @@
 const request = require('supertest')
 const app = require('../config/app')
 const bcrypt = require('bcrypt')
-const MongoHelper = require('../../auth/infra/helpers/mongo-helper')
+const MongoHelper = require('../../utils/helpers/mongo-helper')
 let userModel
 
 describe('Login Routes', () => {
