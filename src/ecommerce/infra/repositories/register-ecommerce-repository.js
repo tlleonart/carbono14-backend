@@ -17,6 +17,10 @@ module.exports = class RegisterEcommerceRepository {
       throw new MissingParamError('description')
     }
 
+    if (!contactEmail) {
+      throw new MissingParamError('contactEmail')
+    }
+
     const ecommerceModel = await MongoHelper.getCollection('ecommerces')
 
     await ecommerceModel.insertOne({
